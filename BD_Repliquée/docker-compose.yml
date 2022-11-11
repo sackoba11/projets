@@ -1,0 +1,102 @@
+version: '2'
+
+services:
+  Serveur-Maitre:
+
+    image: 'bitnami/postgresql:latest'
+
+    ports:
+      - '5000:5432'
+    
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=replication
+      - POSTGRESQL_REPLICATION_PASSWORD=1234
+      - POSTGRESQL_USERNAME=bdrepliquee
+      - POSTGRESQL_PASSWORD=12345
+      - POSTGRESQL_DATABASE=my_database
+      - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
+      - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=3
+
+  Serveur-Maitre2:
+
+    image: 'bitnami/postgresql:latest'
+
+    ports:
+      - '5005:5432'
+
+    depends_on:
+      - Serveur-Maitre
+
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=replication
+      - POSTGRESQL_REPLICATION_PASSWORD=1234
+      - POSTGRESQL_USERNAME=bdrepliquee
+      - POSTGRESQL_PASSWORD=12345
+      - POSTGRESQL_DATABASE=my_database
+      - POSTGRESQL_SYNCHRONOUS_COMMIT_MODE=on
+      - POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS=3
+    
+  Serveur_Second_1:
+    image: 'bitnami/postgresql:latest'
+    ports:
+      - '5001:5432'
+    depends_on:
+      - Serveur-Maitre
+      - Serveur-Maitre2
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=replication
+      - POSTGRESQL_REPLICATION_PASSWORD=1234
+      - POSTGRESQL_MASTER_HOST=Serveur-Maitre
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - POSTGRESQL_USERNAME=bdrepliquee
+      - POSTGRESQL_PASSWORD=12345
+  Serveur_Second_2:
+    image: 'bitnami/postgresql:latest'
+    ports:
+      - '5002:5432'
+    depends_on:
+      - Serveur-Maitre
+      - Serveur-Maitre2
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=replication
+      - POSTGRESQL_REPLICATION_PASSWORD=1234
+      - POSTGRESQL_MASTER_HOST=Serveur-Maitre
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - POSTGRESQL_USERNAME=bdrepliquee
+      - POSTGRESQL_PASSWORD=12345
+
+  Serveur_Second_3:
+    image: 'bitnami/postgresql:latest'
+    ports:
+      - '5003:5432'
+    depends_on:
+      - Serveur-Maitre
+      - Serveur-Maitre2
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=replication
+      - POSTGRESQL_REPLICATION_PASSWORD=1234
+      - POSTGRESQL_MASTER_HOST=Serveur-Maitre
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - POSTGRESQL_USERNAME=bdrepliquee
+      - POSTGRESQL_PASSWORD=12345
+
+  Serveur_Second_4:
+    image: 'bitnami/postgresql:latest'
+    ports:
+      - '5004:5432'
+    depends_on:
+      - Serveur-Maitre
+      - Serveur-Maitre2
+    environment:
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=replication
+      - POSTGRESQL_REPLICATION_PASSWORD=1234
+      - POSTGRESQL_MASTER_HOST=Serveur-Maitre
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - POSTGRESQL_USERNAME=bdrepliquee
+      - POSTGRESQL_PASSWORD=12345
